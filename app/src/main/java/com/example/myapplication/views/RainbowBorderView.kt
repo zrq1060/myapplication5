@@ -38,6 +38,7 @@ class RainbowBorderView @JvmOverloads constructor(
 
     private var shader: SweepGradient? = null
     private val matrix = Matrix()
+
     // 动画
     private var animator: ValueAnimator? = null
     private var degreesOffset = 0f
@@ -48,7 +49,7 @@ class RainbowBorderView @JvmOverloads constructor(
 
     private fun startAnimation() {
         animator = ValueAnimator.ofFloat(0f, 360f).apply {
-            ValueAnimator.setDuration = 4000L // 一圈的时间
+            duration = 4000L // 一圈的时间
             repeatCount = ValueAnimator.INFINITE
             interpolator = LinearInterpolator() // 保持匀速，必须添加。
             addUpdateListener {

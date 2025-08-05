@@ -1,56 +1,53 @@
-package com.example.myapplication.views;
+package com.example.myapplication.views
 
-import android.animation.ValueAnimator;
-import android.content.Context;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Rect;
-import android.util.AttributeSet;
-import android.view.View;
+import android.animation.ValueAnimator
+import android.animation.ValueAnimator.AnimatorUpdateListener
+import android.content.Context
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.Rect
+import android.util.AttributeSet
+import android.view.View
 
-public class BlinkingBorderView extends View {
+class BlinkingBorderView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
+    private var borderPaint: Paint? = null
+    private var animator: ValueAnimator? = null
+    private var alpha = 255 // 初始不透明
 
-    private Paint borderPaint;
-    private ValueAnimator animator;
-    private int alpha = 255; // 初始不透明
-
-    public BlinkingBorderView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        init();
+    init {
+        init()
     }
 
-    private void init() {
-        borderPaint = new Paint();
-        borderPaint.setColor(Color.RED);
-        borderPaint.setStrokeWidth(50);
-        borderPaint.setStyle(Paint.Style.STROKE);
-        borderPaint.setAntiAlias(true);
+    private fun init() {
+        borderPaint = Paint()
+        borderPaint!!.setColor(Color.RED)
+        borderPaint!!.setStrokeWidth(50f)
+        borderPaint!!.setStyle(Paint.Style.STROKE)
+        borderPaint!!.setAntiAlias(true)
 
-        animator = ValueAnimator.ofInt(255, 50, 255); // 闪烁透明度
-        animator.setDuration(1000);
-        animator.setRepeatCount(ValueAnimator.INFINITE);
-        animator.setRepeatMode(ValueAnimator.REVERSE);
-        animator.addUpdateListener(animation -> {
-            alpha = (int) animation.getAnimatedValue();
-            invalidate();
-        });
-        animator.start();
+        animator = ValueAnimator.ofInt(255, 50, 255) // 闪烁透明度
+        animator!!.setDuration(1000)
+        animator!!.setRepeatCount(ValueAnimator.INFINITE)
+        animator!!.setRepeatMode(ValueAnimator.REVERSE)
+        animator!!.addUpdateListener(AnimatorUpdateListener { animation: ValueAnimator? ->
+            alpha = animation!!.getAnimatedValue() as Int
+            invalidate()
+        })
+        animator!!.start()
     }
 
-    @Override
-    protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
-        borderPaint.setAlpha(alpha);
-        Rect rect = new Rect(0, 0, getWidth(), getHeight());
-        canvas.drawRect(rect, borderPaint);
+    override fun onDraw(canvas: Canvas) {
+        super.onDraw(canvas)
+        borderPaint!!.setAlpha(alpha)
+        val rect = Rect(0, 0, getWidth(), getHeight())
+        canvas.drawRect(rect, borderPaint!!)
     }
 
-    @Override
-    protected void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
         if (animator != null) {
-            animator.cancel();
+            animator!!.cancel()
         }
     }
 }

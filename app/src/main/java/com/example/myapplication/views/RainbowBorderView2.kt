@@ -44,7 +44,7 @@ class RainbowBorderView2 @JvmOverloads constructor(
 
     private fun startAnimation() {
         animator = ValueAnimator.ofFloat(0f, 1f).apply {
-            ValueAnimator.setDuration = 3000L
+            duration = 3000L
             repeatCount = ValueAnimator.INFINITE
             addUpdateListener {
                 offset = it.animatedFraction

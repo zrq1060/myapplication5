@@ -1,5 +1,5 @@
 // MarqueeBorderView.kt
-package com.example.widget
+package com.example.myapplication.views
 
 import android.animation.ValueAnimator
 import android.content.Context
