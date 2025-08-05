@@ -1,4 +1,4 @@
-package com.example.myapplication
+package com.example.myapplication.views
 
 import android.animation.ValueAnimator
 import android.content.Context
@@ -38,7 +38,7 @@ class LinearGradientBorderView @JvmOverloads constructor(
 
     private fun startAnimation() {
         animator = ValueAnimator.ofFloat(0f, 1f).apply {
-            duration = 3000L
+            ValueAnimator.setDuration = 3000L
             repeatCount = ValueAnimator.INFINITE
             addUpdateListener {
                 val fraction = it.animatedFraction

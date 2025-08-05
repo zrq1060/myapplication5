@@ -1,4 +1,4 @@
-package com.example.myapplication
+package com.example.myapplication.views
 
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
@@ -48,7 +48,7 @@ class RainbowBorderView @JvmOverloads constructor(
 
     private fun startAnimation() {
         animator = ValueAnimator.ofFloat(0f, 360f).apply {
-            duration = 4000L // 一圈的时间
+            ValueAnimator.setDuration = 4000L // 一圈的时间
             repeatCount = ValueAnimator.INFINITE
             interpolator = LinearInterpolator() // 保持匀速，必须添加。
             addUpdateListener {
