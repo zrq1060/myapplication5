@@ -32,14 +32,14 @@ class DetailAdapter(val activity: DetailActivity,private val itemList: List<Item
         ViewCompat.setTransitionName(holder.imageView, "image_$position")
         ViewCompat.setTransitionName(holder.titleView, "title_$position")
 
-        holder.imageView.viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
-            override fun onPreDraw(): Boolean {
-                holder.imageView.viewTreeObserver.removeOnPreDrawListener(this)
-                Log.e("aaaaaa","DetailActivity-开始")
-                ActivityCompat.startPostponedEnterTransition(activity)
-                return true
-            }
-        })
+//        holder.imageView.viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
+//            override fun onPreDraw(): Boolean {
+//                holder.imageView.viewTreeObserver.removeOnPreDrawListener(this)
+//                Log.e("aaaaaa","DetailActivity-开始")
+//                ActivityCompat.startPostponedEnterTransition(activity)
+//                return true
+//            }
+//        })
     }
 
     override fun getItemCount(): Int {
