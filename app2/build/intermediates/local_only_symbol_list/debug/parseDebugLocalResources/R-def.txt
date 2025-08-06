@@ -1,0 +1,16 @@
+R_DEF: Internal format may change without notice
+local
+bool isFitSystemWindows
+color colorAccent
+color colorPrimary
+color colorPrimaryDark
+id imagesRv
+id viewPager
+layout activity_gallery
+layout activity_main
+mipmap ic_launcher
+mipmap ic_launcher_round
+string app_name
+style AppTheme
+style AppTheme.NoActionBar
+style ToolbarColoredBackArrow

@@ -3,13 +3,13 @@
     <style name="Base.Theme.MyApplication" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
-        <!-- 启用窗口内容过渡 -->
-        <item name="android:windowContentTransitions">true</item>
-        <!-- 进入和退出过渡动画 -->
-        <item name="android:windowEnterTransition">@transition/change_image_transform</item>
-        <item name="android:windowExitTransition">@transition/change_image_transform</item>
-        <item name="android:windowSharedElementEnterTransition">@transition/change_image_transform</item>
-        <item name="android:windowSharedElementExitTransition">@transition/change_image_transform</item>
+<!--        &lt;!&ndash; 启用窗口内容过渡 &ndash;&gt;-->
+<!--        <item name="android:windowContentTransitions">true</item>-->
+<!--        &lt;!&ndash; 进入和退出过渡动画 &ndash;&gt;-->
+<!--        <item name="android:windowEnterTransition">@transition/change_image_transform</item>-->
+<!--        <item name="android:windowExitTransition">@transition/change_image_transform</item>-->
+<!--        <item name="android:windowSharedElementEnterTransition">@transition/change_image_transform</item>-->
+<!--        <item name="android:windowSharedElementExitTransition">@transition/change_image_transform</item>-->
     </style>
 
     <style name="Theme.MyApplication" parent="Base.Theme.MyApplication" />
