@@ -114,7 +114,8 @@ class ListActivity : AppCompatActivity() {
         postponeEnterTransition()
 
         // 滚动
-        recyclerView.scrollToPosition(selectedPosition)
+//        recyclerView.scrollToPosition(selectedPosition)
+        recyclerView.horizontalCenterScrollToPosition(selectedPosition)
 
         recyclerView.viewTreeObserver.addOnPreDrawListener(object :
             ViewTreeObserver.OnPreDrawListener {
@@ -126,7 +127,7 @@ class ListActivity : AppCompatActivity() {
                     "aaaaa",
                     "ListActivity-onActivityReenter=重返位置为=$selectedPosition，开始共享动画"
                 )
-                startPostponedEnterTransition()
+//                startPostponedEnterTransition()
                 return true
             }
         })
@@ -134,10 +135,30 @@ class ListActivity : AppCompatActivity() {
 
     // 初始化列表数据
     private fun initData() {
-        itemList.add(ItemData(R.mipmap.ic_launcher, "项目 1", "这是第一个项目的详细描述信息"))
-        itemList.add(ItemData(R.mipmap.ic_launcher, "项目 2", "这是第二个项目的详细描述信息"))
-        itemList.add(ItemData(R.mipmap.ic_launcher, "项目 3", "这是第三个项目的详细描述信息"))
-        itemList.add(ItemData(R.mipmap.ic_launcher, "项目 4", "这是第四个项目的详细描述信息"))
-        itemList.add(ItemData(R.mipmap.ic_launcher, "项目 5", "这是第五个项目的详细描述信息"))
+        for (i in 0..100) {
+            itemList.add(ItemData(R.mipmap.ic_launcher, "项目$i", "这是第${i}个项目的详细描述信息"))
+        }
+    }
+
+    private fun RecyclerView.horizontalCenterScrollToPosition(position: Int) {
+        val layoutManager = layoutManager ?: return
+        // 滚动到某个位置
+        scrollToPosition(position)
+
+        // 使用post保证上面滚动的位置完成。
+        post {
+            val childView = layoutManager.findViewByPosition(position) ?: return@post
+            // recyclerView中间位置
+            val parentCenter = width / 2
+            //  要移动到View中间，所以需要计算View的宽度/2。
+            val childCenter = childView.left + childView.width / 2
+            // 偏移位置
+            val offset = childCenter - parentCenter
+            // 设置偏移
+            scrollBy(offset, 0)
+
+            // 开始动画
+            startPostponedEnterTransition()
+        }
     }
 }
