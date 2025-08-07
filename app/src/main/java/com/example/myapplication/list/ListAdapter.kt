@@ -5,10 +5,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.example.myapplication.bean.ItemData
 import com.example.myapplication.R
+import com.example.myapplication.bean.ItemData
 
 class ListAdapter(
     private val itemList: MutableList<ItemData>,
@@ -26,15 +25,10 @@ class ListAdapter(
         holder.imageView.setImageResource(data.imageRes)
         holder.titleView.text = data.title
         holder.descriptionView.text = data.description
-
-        // 设置共享元素的transitionName
-        ViewCompat.setTransitionName(holder.imageView, "image_$position")
-        ViewCompat.setTransitionName(holder.titleView, "title_$position")
-
         // 设置点击事件
-        holder.itemView.setOnClickListener(View.OnClickListener { v: View? ->
+        holder.itemView.setOnClickListener { v: View? ->
             listener?.onItemClick(position)
-        })
+        }
     }
 
     override fun getItemCount(): Int {
@@ -42,9 +36,9 @@ class ListAdapter(
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var imageView: ImageView = itemView.findViewById<ImageView>(R.id.iv_image)
-        var titleView: TextView = itemView.findViewById<TextView>(R.id.tv_title)
-        var descriptionView: TextView = itemView.findViewById<TextView>(R.id.tv_description)
+        var imageView: ImageView = itemView.findViewById(R.id.iv_image)
+        var titleView: TextView = itemView.findViewById(R.id.tv_title)
+        var descriptionView: TextView = itemView.findViewById(R.id.tv_description)
     }
 }
 

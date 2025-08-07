@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.bean.ItemData
 import com.example.myapplication.R
 
-class DetailAdapter(val activity: DetailActivity,private val itemList: List<ItemData>) :
+class DetailAdapter(val activity: DetailActivity, private val itemList: List<ItemData>) :
     RecyclerView.Adapter<DetailAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -27,10 +27,6 @@ class DetailAdapter(val activity: DetailActivity,private val itemList: List<Item
         holder.imageView.setImageResource(data.imageRes)
         holder.titleView.text = data.title
         holder.descriptionView.text = data.description
-
-        // 设置共享元素的transitionName，与列表项保持一致
-        ViewCompat.setTransitionName(holder.imageView, "image_$position")
-        ViewCompat.setTransitionName(holder.titleView, "title_$position")
 
 //        holder.imageView.viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
 //            override fun onPreDraw(): Boolean {
@@ -47,8 +43,8 @@ class DetailAdapter(val activity: DetailActivity,private val itemList: List<Item
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var imageView: ImageView = itemView.findViewById<ImageView>(R.id.iv_detail_image)
-        var titleView: TextView = itemView.findViewById<TextView>(R.id.tv_detail_title)
-        var descriptionView: TextView = itemView.findViewById<TextView>(R.id.tv_detail_description)
+        var imageView: ImageView = itemView.findViewById(R.id.iv_detail_image)
+        var titleView: TextView = itemView.findViewById(R.id.tv_detail_title)
+        var descriptionView: TextView = itemView.findViewById(R.id.tv_detail_description)
     }
 }

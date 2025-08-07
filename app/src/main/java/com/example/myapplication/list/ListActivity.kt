@@ -20,50 +20,44 @@ class ListActivity : AppCompatActivity() {
     private var itemList: MutableList<ItemData> = mutableListOf()
     private lateinit var recyclerView: RecyclerView
 
-    // 页面重返要还原的位置
-    private var activityReenterPosition = 0
+    // 选中的位置
+    private var selectedPosition = 0
 
-    // 是否是页面重返
-    private var isActivityReenter: Boolean = false
-
+    //
     private val exitElementCallback = object : SharedElementCallback() {
 
         override fun onMapSharedElements(
             names: MutableList<String>,
             sharedElements: MutableMap<String, View>
         ) {
-            Log.e("aaaaa", "ListActivity-监听退出回调-是否是Activity重返=$isActivityReenter")
-            if (isActivityReenter) {
-                Log.e("aaaaa", "ListActivity-监听退出回调-是Activity重返")
+            // 说明：
+            // 从此页面跳到下个页面，会调用此会回调。
+            // 从下个页面返回到此页面，会先调用onActivityReenter，然后再调用此。所以可以在此控制sharedElements。
+            // 总结：进入到其它页面、返回到这个页面，都会调用此方法。
+            Log.e("aaaaa", "ListActivity-监听退出回调-选中位置：$selectedPosition")
 
-                val activityReenterPositionViewHolder =
-                    recyclerView.findViewHolderForAdapterPosition(activityReenterPosition) as? ListAdapter.ViewHolder
-                if (activityReenterPositionViewHolder != null) {
-                    Log.e(
-                        "aaaaa",
-                        "ListActivity-监听退出回调-是Activity重返，找到重返位置的ViewHolder"
-                    )
 
-                    val imageView = activityReenterPositionViewHolder.imageView
-                    val titleView = activityReenterPositionViewHolder.titleView
-                    // 名字
-                    names.clear()
-                    names.add(imageView.transitionName)
-                    names.add(titleView.transitionName)
+            val selectedPositionViewHolder =
+                recyclerView.findViewHolderForAdapterPosition(selectedPosition) as? ListAdapter.ViewHolder
+            if (selectedPositionViewHolder != null) {
+                Log.e("aaaaa", "ListActivity-监听退出回调-找到${selectedPosition}位置的ViewHolder")
 
-                    // 控件
-                    sharedElements.clear()
-                    sharedElements.put(imageView.transitionName, imageView)
-                    sharedElements.put(titleView.transitionName, titleView)
-                } else {
-                    Log.e(
-                        "aaaaa",
-                        "ListActivity-监听退出回调-是Activity重返，！！！没有找到重返位置的ViewHolder"
-                    )
-                }
+                val imageView = selectedPositionViewHolder.imageView
+                val titleView = selectedPositionViewHolder.titleView
+                // 名字
+                names.clear()
+                names.add("image_$selectedPosition")
+                names.add("title_$selectedPosition")
 
-                // 重返回的还原，避免再次进入动画有问题。
-                isActivityReenter = false
+                // 控件
+                sharedElements.clear()
+                sharedElements.put("image_$selectedPosition", imageView)
+                sharedElements.put("title_$selectedPosition", titleView)
+            } else {
+                Log.e(
+                    "aaaaa",
+                    "ListActivity-监听退出回调-！！！没有找到${selectedPosition}位置的ViewHolder"
+                )
             }
         }
     }
@@ -88,6 +82,7 @@ class ListActivity : AppCompatActivity() {
 
     // item 点击
     private fun click(position: Int, recyclerView: RecyclerView) {
+        selectedPosition = position
         // 处理点击事件，跳转到详情页
         val intent = Intent(this@ListActivity, DetailActivity::class.java)
         intent.putExtra("position", position)
@@ -100,10 +95,9 @@ class ListActivity : AppCompatActivity() {
             // 创建共享元素过渡
             val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
                 this@ListActivity,
-                Pair.create<View?, String?>(viewHolder.imageView as View?, "image_$position"),
-                Pair.create<View?, String?>(viewHolder.titleView as View?, "title_$position")
+                Pair.create<View, String>(viewHolder.imageView, "image_$position"),
+                Pair.create<View, String>(viewHolder.titleView, "title_$position")
             )
-
             // 启动详情页
             startActivity(intent, options.toBundle())
         }
@@ -111,44 +105,31 @@ class ListActivity : AppCompatActivity() {
 
     override fun onActivityReenter(resultCode: Int, data: Intent) {
         super.onActivityReenter(resultCode, data)
-        // 标记为页面重返，和记录页面重返位置。
-        isActivityReenter = true
-        activityReenterPosition = data.getIntExtra("Position", 0)
-        Log.e("aaaaa", "ListActivity-onActivityReenter=重返位置为=$activityReenterPosition")
+        // 页面重返，记录页面重返的选中位置。
+        selectedPosition = data.getIntExtra("Position", 0)
+        Log.e("aaaaa", "ListActivity-onActivityReenter=重返位置为=$selectedPosition")
 
         // 暂停
-        Log.e("aaaaa", "ListActivity-onActivityReenter=重返位置为=$activityReenterPosition，暂停")
+        Log.e("aaaaa", "ListActivity-onActivityReenter=重返位置为=$selectedPosition，暂停共享动画")
         postponeEnterTransition()
 
-        recyclerView.scrollToPosition(activityReenterPosition)
+        // 滚动
+        recyclerView.scrollToPosition(selectedPosition)
 
         recyclerView.viewTreeObserver.addOnPreDrawListener(object :
             ViewTreeObserver.OnPreDrawListener {
             override fun onPreDraw(): Boolean {
+                // 移除
                 recyclerView.viewTreeObserver.removeOnPreDrawListener(this)
-                // 开始
-                Log.e("aaaaa", "ListActivity-onActivityReenter=重返位置为=$activityReenterPosition，开始")
+                // 开启共享动画
+                Log.e(
+                    "aaaaa",
+                    "ListActivity-onActivityReenter=重返位置为=$selectedPosition，开始共享动画"
+                )
                 startPostponedEnterTransition()
                 return true
             }
         })
-
-//        reenterState = Bundle(data.extras)
-//        reenterState?.let {
-//            val startingPosition = it.getInt(EXTRA_STARTING_ALBUM_POSITION)
-//            val currentPosition = it.getInt(EXTRA_CURRENT_ALBUM_POSITION)
-//            if (startingPosition != currentPosition) imagesRv.scrollToPosition(currentPosition)
-//            ActivityCompat.postponeEnterTransition(this)
-//
-//            imagesRv.viewTreeObserver.addOnPreDrawListener(object :
-//                ViewTreeObserver.OnPreDrawListener {
-//                override fun onPreDraw(): Boolean {
-//                    imagesRv.viewTreeObserver.removeOnPreDrawListener(this)
-//                    ActivityCompat.startPostponedEnterTransition(this@MainActivity)
-//                    return true
-//                }
-//            })
-//        }
     }
 
     // 初始化列表数据
