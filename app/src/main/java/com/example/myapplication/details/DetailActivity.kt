@@ -1,6 +1,5 @@
 package com.example.myapplication.details
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -59,6 +58,11 @@ class DetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         // 设置页面
         setContentView(R.layout.activity_detail)
+        // 设置动画
+//        window.sharedElementEnterTransition =
+//            TransitionInflater.from(this)
+//                .inflateTransition(android.R.transition.move)
+//                .apply { duration = 2000 } // 动画时间 500ms
         // 设置进入监听
         setEnterSharedElementCallback(this, enterElementCallback)
         // 等待ViewPager2布局完成后再开始过渡动画
